@@ -39,4 +39,5 @@ private:
     Eigen::Matrix<double, 3, 3> C;
     Eigen::Vector3d x;
     Eigen::Vector3d y;
+    double u_pre;
 };

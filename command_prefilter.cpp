@@ -32,18 +32,27 @@ void CommandPrefilter::init(double cutoff_freq, double sample_interval)
     x.fill(0.0);
 
     // Discrete-time system and input matrices
-    A = I + Ac * T + 0.5 * Ac * Ac * T * T + 1.0 / 6.0 * Ac * Ac * Ac * T * T * T + 1.0 / 24.0 * Ac * Ac * Ac * Ac * T * T * T * T;
-    B = Ac.inverse() * (A - I) * Bc;
+    // A = I + Ac * T + 0.5 * Ac * Ac * T * T + 1.0 / 6.0 * Ac * Ac * Ac * T * T * T + 1.0 / 24.0 * Ac * Ac * Ac * Ac * T * T * T * T;
+    // B = Ac.inverse() * (A - I) * Bc;
+    A = (I - 0.5 * Ac * T);
+    B = A.inverse() * 0.5 * T * Bc;
+    A = A.inverse() * (I + 0.5 * Ac * T);
 }
 
 // Algorithm of Third-Order Command Prefilter
 void CommandPrefilter::update(const double& input_sig, double& pos_f, double& vel_f, double& acc_f)
 {
-    // Output equation
-    y = C * x;
+    // // Output equation
+    // y = C * x;
 
-    // State equation
-    x = A * x + B * input_sig;
+    // // State equation
+    // x = A * x + B * input_sig;
+
+    // Bilinear transform
+    x = A * x + B * (input_sig + u_pre);
+    u_pre = input_sig;
+
+    y = C * x;
 
     // Copy data
     pos_f = y(0);
