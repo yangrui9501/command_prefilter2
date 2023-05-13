@@ -53,10 +53,10 @@ void loop()
 
 double sign(double u_in)
 {
-  if (u_in > 0.0)
-    return 1.0;
-  else if (u_in < 0.0)
-    return -1.0;
-  return 0.0;
-}
+    if (u_in > 0.0)
+        return 1.0;
+    else if (u_in < 0.0)
+        return -1.0;
+    return 0.0;
+    }
 ```
